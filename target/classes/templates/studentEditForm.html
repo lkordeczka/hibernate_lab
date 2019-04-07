@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+
+    <div layout:fragment="content">
+    <div th:include="menuFragment" ></div>
+    	<br/><br/>
+	   			<form action="CreateStudent" method="POST">
+					<h4 th:text="${student.id}" style='color:#c00' />
+					<table>
+						<tr><td>imie:</td><td><input type="text" name="studentName" /></td></tr>
+						<tr><td>nazwisko:</td><td><input type="text" name="studentSurname" /></td></tr>
+						<tr><td>pesel:</td><td><input type="text" name="studentPesel" /></td></tr>
+						<!-- <tr><td>klasa:</td><td><input type="text" name="schoolClassId" /></td></tr> -->
+						<tr><td>klasa:</td><td><select class="form-control" name="schoolClassId" id="schoolClassId">
+							<option value="-1">---</option>
+							<option th:each="schoolClass: ${schoolClasses}" th:value="${schoolClass.id}" th:text="test"></option>
+							</select></td></tr>
+					</table><br/><BR/>
+					<input type="submit" value="Utwórz"/>
+				</form>
+    </div>
+
+</body>
+</html>
+
+
