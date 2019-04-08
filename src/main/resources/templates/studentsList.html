@@ -11,12 +11,14 @@
     	<div th:include="menuFragment" ></div>
 		<br/><Br/>
 		<table border="1" cellpadding="5">
-			<tr><th>Id</th><th>Imię</th><th>Nazwisko</th><th>Pesel</th><th colspan="2">Akcje</th></tr>
+			<tr><th>Id</th><th>Imię</th><th>Nazwisko</th><th>Pesel</th><th>Klasa</th><th>Szkoła</th><th colspan="2">Akcje</th></tr>
 			<tr th:each="student: ${students}">
 				<td><span th:text="${student.id}" /></td>
 				<td><span th:text="${student.name}" /></td>
 				<td><span th:text="${student.surname}" /></td>
 				<td><span th:text="${student.pesel}" /></td>
+				<td><span th:text="${student.schoolClass?.id} ? ${student.schoolClass.profile} : '---'" /></td>
+				<td><span th:text="${student.schoolClass?.school?.id} ? ${student.schoolClass.school.toString()} : '---'" /></td>
 		        <td>
 		            <form action="DeleteStudent" method="POST">
 		            	<input type="hidden" name="studentId" th:value="${student.id}" />

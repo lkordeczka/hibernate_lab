@@ -81,9 +81,6 @@ public class StudentsController {
     	Iterable<SchoolClass> schoolClasses = DatabaseConnector.getInstance().getSchoolClasses();
     	
     	SchoolClass schoolClass = DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId);
-    	System.out.println("<<<<<<");
-    	System.out.println(schoolClass);
-    	System.out.println(">>>>>>");
     	
     	model.addAttribute("currentSchoolClass", DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId));
     	model.addAttribute("schoolClasses", schoolClasses);
