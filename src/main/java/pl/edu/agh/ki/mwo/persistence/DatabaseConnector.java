@@ -40,8 +40,7 @@ public class DatabaseConnector {
 		
 		return schools;
 	}
-	
-	
+		
 	public void addSchool(School school) {
 		Transaction transaction = session.beginTransaction();
 		session.save(school);
@@ -117,7 +116,6 @@ public class DatabaseConnector {
 		transaction.commit();
 	}
 	
-
 	public void deleteStudent(String studentId) {
 		String hql = "FROM Student S WHERE S.id=" + studentId;
 		Query query = session.createQuery(hql);
@@ -162,12 +160,18 @@ public class DatabaseConnector {
 		String hql = "FROM SchoolClass S WHERE S.id=" + schoolClassId;
 		Query query = session.createQuery(hql);
 		List<SchoolClass> schoolClasses = query.list();
+		
+		if(student.getSchoolClass() != null) {
+			student.getSchoolClass().removeStudent(student);
+		}
+		student.setSchoolClass(null);
 		Transaction transaction = session.beginTransaction();
 		if (schoolClasses.size() == 0) {
 			session.update(student);
 		} else {
 			SchoolClass schoolClass = schoolClasses.get(0);
 			schoolClass.addStudent(student);
+			student.setSchoolClass(schoolClass);
 			session.update(schoolClass);
 		}
 		transaction.commit();
@@ -175,10 +179,6 @@ public class DatabaseConnector {
 	
 	public void editStudent(Student student, String studentId, String schoolClassId) {
 				
-		session.update(student);		
-		
-		System.out.println(schoolClassId);
-		Transaction transaction = session.beginTransaction();		
 		assignExistingStudentToTheClass(student, schoolClassId);
 		
 	}

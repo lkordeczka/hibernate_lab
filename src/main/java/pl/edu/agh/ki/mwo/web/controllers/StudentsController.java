@@ -71,7 +71,6 @@ public class StudentsController {
     	return "studentsList";
     }
 
-//  aaaaaaa
     @RequestMapping(value="/EditStudent", method=RequestMethod.POST)
     public String displayEditStudent(@RequestParam(value="studentId", required=false) String studentId,
     		Model model, HttpSession session) {  	
@@ -101,16 +100,7 @@ public class StudentsController {
     		return "redirect:/Login";
     	
     	Student student = DatabaseConnector.getInstance().returnExistingStudent(studentId);
-    	
-    	System.out.println("!!!!!!!!");
-    	try {
-    		System.out.println(student.getSchoolClassProfile());
-    	}
-    	catch (NullPointerException expected) {
-    		System.out.println("---");
-    	}
-    	System.out.println("!!!!!!!!");
-    	
+
     	student.setName(name);
     	student.setSurname(surname);
     	student.setPesel(pesel);    	
@@ -122,10 +112,4 @@ public class StudentsController {
          	
     	return "studentsList";
     }
-    
-    	
-   
-    
-    
-    
 }

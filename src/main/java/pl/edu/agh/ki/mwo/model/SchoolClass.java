@@ -110,4 +110,8 @@ public class SchoolClass implements java.io.Serializable {
 	public String toString() {
 		return "Class: " + profile + " (Started: " + getStartYear() + ", Current year: " + getCurrentYear() + ")";
 	}
+
+	public void removeStudent(Student student) {
+		students.remove(student);		
+	}
 }
