@@ -66,21 +66,6 @@ public class DatabaseConnector {
 		return schoolClasses;
 	}
 	
-	public void addSchoolClass(SchoolClass schoolClass, String schoolId) {
-		String hql = "FROM School S WHERE S.id=" + schoolId;
-		Query query = session.createQuery(hql);
-		List<School> results = query.list();
-		Transaction transaction = session.beginTransaction();
-		if (results.size() == 0) {
-			session.save(schoolClass);
-		} else {
-			School school = results.get(0);
-			school.addClass(schoolClass);
-			session.save(school);
-		}
-		transaction.commit();
-	}
-	
 	public void deleteSchoolClass(String schoolClassId) {
 		String hql = "FROM SchoolClass S WHERE S.id=" + schoolClassId;
 		Query query = session.createQuery(hql);
@@ -100,18 +85,18 @@ public class DatabaseConnector {
 		return students;
 	}
 	
-	public void addStudent(Student student, String schoolClassId) {
-		System.out.println("Jestem w addStudent");
-		String hql = "FROM SchoolClass S WHERE S.id=" + schoolClassId;
+	public void addSchoolClass(SchoolClass schoolClass, String schoolId) {
+		String hql = "FROM School S WHERE S.id=" + schoolId;
 		Query query = session.createQuery(hql);
-		List<SchoolClass> schoolClasses = query.list();
+		List<School> results = query.list();
 		Transaction transaction = session.beginTransaction();
-		if (schoolClasses.size() == 0) {
-			session.save(student);
-		} else {
-			SchoolClass schoolClass = schoolClasses.get(0);
-			schoolClass.addStudent(student);
+		if (results.size() == 0) {
 			session.save(schoolClass);
+		} else {
+			School school = results.get(0);
+			school.addClass(schoolClass);
+			schoolClass.setSchool(schoolClass);
+			session.save(school);
 		}
 		transaction.commit();
 	}
@@ -119,9 +104,13 @@ public class DatabaseConnector {
 	public void deleteStudent(String studentId) {
 		String hql = "FROM Student S WHERE S.id=" + studentId;
 		Query query = session.createQuery(hql);
+		
 		List<Student> results = query.list();
 		Transaction transaction = session.beginTransaction();
 		for (Student s : results) {
+			if(s.getSchoolClass() != null) {
+				s.getSchoolClass().removeStudent(s);
+			}
 			session.delete(s);
 		}
 		transaction.commit();
@@ -146,7 +135,6 @@ public class DatabaseConnector {
 		List<SchoolClass> schoolClasses = returnSchoolClassesList();
 		for (SchoolClass schoolClass : schoolClasses) {
 			for(Student student : schoolClass.getStudents()) {
-				System.out.println("Czy " + student.getId() + " == " + studentId);
 				if (Long.toString(student.getId()).equals(studentId)) {
 					return schoolClass;
 				}
@@ -155,33 +143,29 @@ public class DatabaseConnector {
 		return null;
 	}
 	
-	
-	public void assignExistingStudentToTheClass(Student student, String schoolClassId) {
+	public void addOrEditStudent(Student student, String schoolClassId, String action) {
 		String hql = "FROM SchoolClass S WHERE S.id=" + schoolClassId;
 		Query query = session.createQuery(hql);
 		List<SchoolClass> schoolClasses = query.list();
-		
-		if(student.getSchoolClass() != null) {
+	
+		if(action.equals("edit") && student.getSchoolClass() != null) {
 			student.getSchoolClass().removeStudent(student);
+			student.setSchoolClass(null);
 		}
-		student.setSchoolClass(null);
-		Transaction transaction = session.beginTransaction();
-		if (schoolClasses.size() == 0) {
-			session.update(student);
-		} else {
+
+		Transaction transaction = session.beginTransaction();		
+		if (schoolClasses.size() > 0) {
 			SchoolClass schoolClass = schoolClasses.get(0);
 			schoolClass.addStudent(student);
 			student.setSchoolClass(schoolClass);
-			session.update(schoolClass);
 		}
+		
+		if (action.equals("edit")) {
+			session.update(student);
+		} else {
+			session.save(student);
+		}				
 		transaction.commit();
 	}
-	
-	public void editStudent(Student student, String studentId, String schoolClassId) {
-				
-		assignExistingStudentToTheClass(student, schoolClassId);
-		
-	}
-	
 	
 }

@@ -31,7 +31,8 @@ public class StudentsController {
     	if (session.getAttribute("userLogin") == null)
     		return "redirect:/Login";
     	
-    	model.addAttribute("schoolClasses", DatabaseConnector.getInstance().getSchoolClasses());
+    	Iterable <School> schools = DatabaseConnector.getInstance().getSchools();
+    	model.addAttribute("schools", schools);
     	
         return "studentForm";    
     }
@@ -50,9 +51,9 @@ public class StudentsController {
     	student.setName(name);
     	student.setSurname(surname);
     	student.setPesel(pesel);
-    	
-    	DatabaseConnector.getInstance().addStudent(student, schoolClassId);    	
-       	model.addAttribute("students", DatabaseConnector.getInstance().getStudents());
+
+    	DatabaseConnector.getInstance().addOrEditStudent(student, schoolClassId, "add");  
+    	model.addAttribute("students", DatabaseConnector.getInstance().getStudents());
     	model.addAttribute("message", "Nowy uczeń został dodany");
          	
     	return "studentsList";
@@ -77,13 +78,12 @@ public class StudentsController {
     	if (session.getAttribute("userLogin") == null)
     		return "redirect:/Login";
     	
-    	Iterable<SchoolClass> schoolClasses = DatabaseConnector.getInstance().getSchoolClasses();
-    	
     	SchoolClass schoolClass = DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId);
+    	Iterable <School> schools = DatabaseConnector.getInstance().getSchools();
     	
     	model.addAttribute("currentSchoolClass", DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId));
-    	model.addAttribute("schoolClasses", schoolClasses);
     	model.addAttribute("student", DatabaseConnector.getInstance().returnExistingStudent(studentId));
+    	model.addAttribute("schools", schools);
          	
     	return "studentForm";
     }
@@ -105,8 +105,8 @@ public class StudentsController {
     	student.setSurname(surname);
     	student.setPesel(pesel);    	
     	
-    	DatabaseConnector.getInstance().editStudent(student, studentId, schoolClassId);
-    	
+    	DatabaseConnector.getInstance().addOrEditStudent(student, schoolClassId, "edit");
+    	    	
        	model.addAttribute("students", DatabaseConnector.getInstance().getStudents());
     	model.addAttribute("message", "Uczeń został poprawnie edytowany");
          	

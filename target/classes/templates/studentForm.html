@@ -16,11 +16,13 @@
 							<td>
 								<select class="form-control" name="schoolClassId" id="schoolClassId">							
 									<option value="-1">---</option>
-									<option th:each="schoolClass: ${schoolClasses}" 
-										th:value="${schoolClass.id}" 
-										th:text="${schoolClass.profile}" 
-										th:selected="${currentSchoolClass?.id == schoolClass.id}">
-									</option>
+									<span th:each="school : ${schools}">									
+										<option th:each="schoolClass: ${school.getClasses()}" 
+											th:value="${schoolClass.id}" 
+											th:text="${schoolClass?.toString()}" 
+											th:selected="${currentSchoolClass?.id == schoolClass.id}">
+										</option>
+									</span>
 								</select></td></tr>
 					</table><br/><BR/>
 					<input type="submit" th:value="${student} ? 'Zapisz zmiany' : 'Utwórz nowego ucznia'" />
