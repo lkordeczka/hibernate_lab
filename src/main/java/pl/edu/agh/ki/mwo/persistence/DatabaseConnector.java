@@ -72,6 +72,9 @@ public class DatabaseConnector {
 		List<SchoolClass> results = query.list();
 		Transaction transaction = session.beginTransaction();
 		for (SchoolClass s : results) {
+			if (s.getSchool() != null) {
+				s.getSchool().removeSchoolClass(s);
+			}
 			session.delete(s);
 		}
 		transaction.commit();
@@ -95,7 +98,7 @@ public class DatabaseConnector {
 		} else {
 			School school = results.get(0);
 			school.addClass(schoolClass);
-			schoolClass.setSchool(schoolClass);
+			schoolClass.setSchool(school);
 			session.save(school);
 		}
 		transaction.commit();

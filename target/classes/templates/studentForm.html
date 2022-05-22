@@ -19,7 +19,7 @@
 									<span th:each="school : ${schools}">									
 										<option th:each="schoolClass: ${school.getClasses()}" 
 											th:value="${schoolClass.id}" 
-											th:text="${schoolClass?.toString()}" 
+											th:text="${schoolClass.toString()}" 
 											th:selected="${currentSchoolClass?.id == schoolClass.id}">
 										</option>
 									</span>

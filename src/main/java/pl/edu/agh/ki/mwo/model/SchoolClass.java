@@ -91,7 +91,7 @@ public class SchoolClass implements java.io.Serializable {
     }
 	
 	@JsonIgnore
-    public void setSchool(SchoolClass schoolClass) {
+    public void setSchool(School school) {
         this.school = school;
     }
 	
@@ -108,7 +108,8 @@ public class SchoolClass implements java.io.Serializable {
     }
 	
 	public String toString() {
-		return "Class: " + profile + ", Current year: " + getCurrentYear() + "; School: " + school.toString();
+		String schoolName = school != null ? school.toString() : "Brak szkoly";
+		return "Class: " + profile + ", Current year: " + getCurrentYear() + "; School: " + schoolName;
 	}
 	
 	public void removeStudent(Student student) {
