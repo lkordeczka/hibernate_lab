@@ -77,12 +77,11 @@ public class StudentsController {
     		Model model, HttpSession session) {  	
     	if (session.getAttribute("userLogin") == null)
     		return "redirect:/Login";
-    	
-    	SchoolClass schoolClass = DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId);
+
     	Iterable <School> schools = DatabaseConnector.getInstance().getSchools();
     	
     	model.addAttribute("currentSchoolClass", DatabaseConnector.getInstance().findCurrentlyStudentLocalisationInClasses(studentId));
-    	model.addAttribute("student", DatabaseConnector.getInstance().returnExistingStudent(studentId));
+    	model.addAttribute("student", DatabaseConnector.getInstance().returnStudentById(studentId));
     	model.addAttribute("schools", schools);
          	
     	return "studentForm";
@@ -99,7 +98,7 @@ public class StudentsController {
     	if (session.getAttribute("userLogin") == null)
     		return "redirect:/Login";
     	
-    	Student student = DatabaseConnector.getInstance().returnExistingStudent(studentId);
+    	Student student = DatabaseConnector.getInstance().returnStudentById(studentId);
 
     	student.setName(name);
     	student.setSurname(surname);
